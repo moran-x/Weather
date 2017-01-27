@@ -1,9 +1,9 @@
 #OSX 
-OPEN = open
+#OPEN = open
 #LINUX
 #OPEN = xdg-open
 #WINDOWS
-#OPEN = start 
+OPEN = start 
 
 coverage:
 	nosetests --with-coverage --cover-package=weatherpy --cover-html

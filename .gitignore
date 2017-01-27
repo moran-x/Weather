@@ -7,3 +7,7 @@ cover
 build
 dist
 *.egg-info
+*.json
+.weatherrc
+Weather.e4p
+_eric6project/

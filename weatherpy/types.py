@@ -1,3 +1,6 @@
+from .translate import *
+from gettext import gettext as _
+set_up()
 
 class Units(object):
     METRIC = "metric"
@@ -22,13 +25,13 @@ class Direction(object):
     def shorthand(direction):
         normalized = direction.lower()
         if normalized == "east":
-            return "E"
+            return _("E")
         if normalized == "west":
-            return "W"
+            return _("W")
         if normalized == "south":
-            return "S"
+            return _("S")
         if normalized == "north":
-            return "N"
+            return _("N")
         return direction
 
 class DateFormats(object):

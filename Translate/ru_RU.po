@@ -1,0 +1,250 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-01-27 15:50+0700\n"
+"PO-Revision-Date: 2017-01-27 15:51+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ../weatherpy\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: weather.py\n"
+"X-Poedit-SearchPath-1: __init__.py\n"
+"X-Poedit-SearchPath-2: translate.py\n"
+"X-Poedit-SearchPath-3: types.py\n"
+
+#: translate.py:31
+#, python-format
+msgid "%(prog)s: error: %(message)s\n"
+msgstr ""
+
+#: translate.py:32
+msgid "expected one argument"
+msgstr ""
+
+#: translate.py:33
+#, python-format
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr ""
+
+#: translate.py:34
+#, python-format
+msgid "not allowed with argument %s"
+msgstr ""
+
+#: translate.py:35
+msgid "optional arguments"
+msgstr "необязательные аргументы"
+
+#: translate.py:36
+msgid "positional arguments"
+msgstr "позиционные аргументы"
+
+#: translate.py:37
+msgid "show this help message and exit"
+msgstr "показать эту справку и выйти"
+
+#: translate.py:38
+msgid "usage: "
+msgstr "использование:"
+
+#: translate.py:59
+#, python-brace-format
+msgid "{name} version {ver}."
+msgstr ""
+
+#: translate.py:78
+msgid "This module should not be executed directly."
+msgstr ""
+
+#: types.py:28
+msgid "E"
+msgstr "В"
+
+#: types.py:30
+msgid "W"
+msgstr "З"
+
+#: types.py:32
+msgid "S"
+msgstr "Ю"
+
+#: types.py:34
+msgid "N"
+msgstr "С"
+
+#: weather.py:47
+#, python-brace-format
+msgid "No alerts for {0}"
+msgstr "Нет оповещения для {0}"
+
+#: weather.py:56
+#, python-brace-format
+msgid "Weather for {0}"
+msgstr "Погода для {0}"
+
+#: weather.py:61 weather.py:63
+#, python-brace-format
+msgid "Currently: {0} ({1}) {2}"
+msgstr "В данный момент: {0} ({1}) {2}"
+
+#: weather.py:66
+#, python-brace-format
+msgid "Wind: From the {0} an {1} {2}"
+msgstr "Ветер: направление {0} со скоростью {1} {2}"
+
+#: weather.py:67
+#, python-brace-format
+msgid "Humidity: {0}"
+msgstr "Влажность: {0}"
+
+#: weather.py:75 weather.py:93
+msgid "Date"
+msgstr "Дата"
+
+#: weather.py:75
+msgid "Hour"
+msgstr "Час"
+
+#: weather.py:75
+msgid "Temperature"
+msgstr "Температура"
+
+#: weather.py:75 weather.py:93
+msgid "Chance of Rain"
+msgstr "Вероятность дождя"
+
+#: weather.py:75
+msgid "Weather"
+msgstr "Погода"
+
+#: weather.py:83
+msgid "36 Hour Hourly Forecast:"
+msgstr "Прогноз на 36 часов:"
+
+#: weather.py:93
+msgid "Condition"
+msgstr "Состояние"
+
+#: weather.py:93
+msgid "Temp (Hi/Lo)"
+msgstr "Температура (мин/мах)"
+
+#: weather.py:93
+msgid "Wind"
+msgstr "Ветер"
+
+#: weather.py:93
+msgid "Humidity"
+msgstr "Влажность"
+
+#: weather.py:105
+msgid "Weather Forecast:"
+msgstr "Прогноз погоды:"
+
+#: weather.py:112
+msgid "Astromony event:"
+msgstr "Астрономические явления:"
+
+#: weather.py:117
+#, python-brace-format
+msgid "Sun Rise: {0}, Sun Set: {1}"
+msgstr "Восход Солнца {0}, Заход Солнца {1}"
+
+#: weather.py:118
+#, python-brace-format
+msgid "Moon Rise: {0}, Moon Set: {1}"
+msgstr "Восход Луны {0}, Заход Луны {1}"
+
+#: weather.py:119
+#, python-brace-format
+msgid "Age of Moon : {0}"
+msgstr "Возраст Луны: {0}"
+
+#: weather.py:120
+#, python-brace-format
+msgid "Phase of Moon : {0}"
+msgstr "Фаза Луны: {0}"
+
+#: weather.py:228
+msgid "More than 1 city matched your query, try being more specific"
+msgstr ""
+"Более 1 города, соответствующих вашему запросу, попробуйте быть более "
+"конкретным"
+
+#: weather.py:298
+msgid "Display the current weather, or forecast"
+msgstr "Отображает текущую погоду или прогноз"
+
+#: weather.py:299
+msgid "Optional location, by default uses geoip"
+msgstr "Указать местоположение, по умолчанию использует GeoIP"
+
+#: weather.py:301
+msgid "Get the current conditions (Default)"
+msgstr "Получить текущие условия (по умолчанию)"
+
+#: weather.py:303
+msgid "Get the current forecast"
+msgstr "Получить текущий прогноз"
+
+#: weather.py:305
+msgid "Get the 10 day forecast"
+msgstr "Получить прогноз на 10 дней"
+
+#: weather.py:307
+msgid "Get the hourly forecast"
+msgstr "Получить почасовой прогноз"
+
+#: weather.py:309
+msgid "View any current weather alerts"
+msgstr "Просмотреть все текущие оповещения о погоде"
+
+#: weather.py:312
+msgid "Set time format to use (default is 'civilian')"
+msgstr "Установить формат времени (по умолчанию 'civilian')"
+
+#: weather.py:314
+msgid "Set date format to use (default is 'date')"
+msgstr "Установить формат даты (по умолчанию 'date')"
+
+#: weather.py:316
+msgid "Set units to use (default is 'english')"
+msgstr "Установить единицы измерения (по умолчанию 'english')"
+
+#: weather.py:326
+#, python-brace-format
+msgid "Request: {0}"
+msgstr "Запрос: {0}"
+
+#~ msgid "Wind: {0}"
+#~ msgstr "Ветер: {0}"
+
+#~ msgid "Sun Rise: {0}, Moon Set: {1}"
+#~ msgstr "Восход Солнца {0}, Заход Солнца{1}"
+
+#~ msgid "Astromony event"
+#~ msgstr "Астрономические явления"
+
+#~ msgid "Language to use."
+#~ msgstr "Язык для использования."
+
+#~ msgid "Display version information."
+#~ msgstr "Вывести информацию о версии."
+
+#~ msgid "kph"
+#~ msgstr "км/ч"
+
+#~ msgid "mph"
+#~ msgstr "миль/час"
+
+#~ msgid "No alerts {0}"
+#~ msgstr "Нет оповещения для {0}"
+
+#~ msgid "Hello, world!"
+#~ msgstr "Привет, мир!"

@@ -1,21 +1,25 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 from __future__ import print_function
-
 import argparse
 import sys
 import json
 import codecs
 import os
+import locale
 from .types import *
 from .settings import Settings, WEATHER_CONF_FILE
 
+from .translate import *
+from gettext import gettext as _
 
+set_up()
 class ResultPrinter(object):
     """
     Responsible for printing weather underground API results
     in a formatted manner.
     """
+  
     def __init__(self, out=None, settings=None):
         self.out = out
         self.settings = settings
@@ -33,14 +37,14 @@ class ResultPrinter(object):
 
     def _print(self, msg):
         # convert bytes (python 3) or unicode (python 2) to str
-        print(msg, file=self.out)
+        print (msg, file=self.out)
 
     def print_alerts(self, data):
         """
         Prints any weather alerts in red
         """
         if not len(data['alerts']):
-            self._print("No alerts for {0}".format(data['current_observation']['display_location']['full']))
+            self._print(_("No alerts for {0}").format(data['current_observation']['display_location']['full']))
 
         for alert in data['alerts']:
             self._print("\033[91m" + alert['message'].rstrip("\n") + "\nExpires: " + alert['expires'] + "\033[0m")
@@ -49,17 +53,18 @@ class ResultPrinter(object):
         """
         Prints the current weather conditions
         """
-        self._print("Weather for {0}".format(data['display_location']['full']))
+        self._print(_("Weather for {0}").format(data['display_location']['full']))
 
         temp_c = format_degree({"metric": data['temp_c']}, Units.METRIC)
         temp_f = format_degree({"english": data['temp_f']}, Units.ENGLISH)
         if self.settings.units == Units.METRIC:
-            self._print(u"Currently: {0} ({1}) {2}".format(temp_c, temp_f, data["weather"]))
+            self._print(_(u"Currently: {0} ({1}) {2}").format(temp_c, temp_f, data["weather"]))
         else:
-            self._print(u"Currently: {0} ({1}) {2}".format(temp_f, temp_c, data["weather"]))
+            self._print(_(u"Currently: {0} ({1}) {2}").format(temp_f, temp_c, data["weather"]))
 
-        self._print("Wind: {0}".format(data['wind_string']))
-        self._print("Humidity: {0}".format(data['relative_humidity']))
+        #self._print(_("Wind: {0}").format(data['wind_string']))
+        self._print(_("Wind: From the {0} an {1} {2}").format(data['wind_dir'],  data['wind_kph'], self.settings.units))
+        self._print(_("Humidity: {0}").format(data['relative_humidity']))
 
     def print_hourly(self, data):
         """
@@ -67,7 +72,7 @@ class ResultPrinter(object):
         """
         # Need to generate an array to send the print_table, first row must be the keys
         val = []
-        val.append(["Date", "Hour", "Temperature", "Chance of Rain", "Weather"])
+        val.append([_("Date"), _("Hour"), _("Temperature"), _("Chance of Rain"), _("Weather")])
 
         for item in data:
             time = format_hour(item["FCTTIME"], self.settings.time)
@@ -75,7 +80,7 @@ class ResultPrinter(object):
             temp = format_degree(item["temp"], self.settings.units)
             val.append([date, time, temp, item["pop"] + "%", item['condition']])
 
-        self._print("36 Hour Hourly Forecast:")
+        self._print(_("36 Hour Hourly Forecast:"))
         self._print_table(val)
 
     def print_forecast(self, data):
@@ -85,7 +90,7 @@ class ResultPrinter(object):
         unit = self.settings.units
         val = []
         # Need to generate an array to send the print_table, first row must be the keys
-        val.append(["Date", "Condition", "Chance of Rain", "Temp (Hi/Lo)", "Wind", "Humidity"])
+        val.append([_("Date"), _("Condition"), _("Chance of Rain"), _("Temp (Hi/Lo)"), _("Wind"), _("Humidity")])
 
         for item in data:
             date = item['date']
@@ -97,9 +102,23 @@ class ResultPrinter(object):
             hum = str(item["avehumidity"]) + "%"
             val.append([date_str, item['conditions'], str(item["pop"]) + "%", temp, wind, hum])
 
-        print("Weather Forecast:")
+        print(_("Weather Forecast:"))
         self._print_table(val)
-
+        
+    def print_astronomy(self,  data):
+        """
+        Print astronomy event
+        """
+        self._print(_("Astromony event:"))
+        sunrise = data['sunrise']['hour']+":"+data['sunrise']['minute']
+        sunset = data['sunset']['hour']+":"+data['sunset']['minute']
+        moonrise = data['moonrise']['hour']+":"+data['moonrise']['minute']
+        moonset = data['moonset']['hour']+":"+data['moonset']['minute']
+        self._print(_("Sun Rise: {0}, Sun Set: {1}").format(sunrise, sunset))
+        self._print(_("Moon Rise: {0}, Moon Set: {1}").format(moonrise, moonset))
+        self._print(_("Age of Moon : {0}").format(data['ageOfMoon']))
+        self._print(_("Phase of Moon : {0}").format(data['phaseofMoon']))
+        
     def _print_table(self, table):
         """
         Aligns and prints an array into a formatted table
@@ -201,19 +220,20 @@ def print_weather_data(data, args, settings):
     Prints the supplied weather data as specified by the options and program arguments.
     """
     data = json.loads(data.decode('utf-8'))
-
     if 'error' in data['response']:
         print(data['response']['error']['description'])
         return
 
     if 'results' in data['response']:
-        print("More than 1 city matched your query, try being more specific")
+        print(_("More than 1 city matched your query, try being more specific"))
         for result in data['response']['results']:
             print("{0}, {1} {2}".format(result['name'], result['state'],
                                         result['country_name']))
         return
 
     result_printer = ResultPrinter(settings=settings)
+    result_printer.print_astronomy(data['moon_phase'])
+    print("")
     if args.alerts:
         result_printer.print_alerts(data)
         print("")
@@ -227,14 +247,13 @@ def print_weather_data(data, args, settings):
         result_printer.print_forecast(data['forecast']['simpleforecast']['forecastday'])
         print("")
 
-
 def make_query_path(args):
     """
     Returns a path to use against the weather underground API
     by parsing program arguments.
     """
-    query = ""
-
+    _locale, _encoding = locale.getdefaultlocale()
+    query = "lang:"+_locale[3:]+"/astronomy/"
     paths = {
         "now": "conditions/alerts/",
         "forecast": "forecast/",
@@ -276,25 +295,25 @@ def make_api_url(args, settings):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Display the current weather, or forecast")
-    parser.add_argument('location', nargs='*', help='Optional location, by default uses geoip')
+    parser = argparse.ArgumentParser(description=_("Display the current weather, or forecast"))
+    parser.add_argument('location', nargs='*', help=_('Optional location, by default uses geoip'))
 
-    parser.add_argument('-n', '--now', help='Get the current conditions (Default)',
+    parser.add_argument('-n', '--now', help=_('Get the current conditions (Default)'),
                         action='store_true')
-    parser.add_argument('-f', '--forecast', help='Get the current forecast',
+    parser.add_argument('-f', '--forecast', help=_('Get the current forecast'),
                         action='store_true')
-    parser.add_argument('-e', '--extended', help='Get the 10 day forecast',
+    parser.add_argument('-e', '--extended', help=_('Get the 10 day forecast'),
                         action='store_true')
-    parser.add_argument('-o', '--hourly', help='Get the hourly forecast',
+    parser.add_argument('-o', '--hourly', help=_('Get the hourly forecast'),
                         action='store_true')
-    parser.add_argument('-a', '--alerts', help='View any current weather alerts',
+    parser.add_argument('-a', '--alerts', help=_('View any current weather alerts'),
                         action='store_true')
     parser.add_argument('-t', '--time', choices=TimeFormats.to_array(),
-                        help='Set time format to use (default is \'civilian\')')
+                        help=_('Set time format to use (default is \'civilian\')'))
     parser.add_argument('-d', '--date', choices=DateFormats.to_array(),
-                        help='Set date format to use (default is \'date\')')
+                        help=_('Set date format to use (default is \'date\')'))
     parser.add_argument('-u', '--units', choices=Units.to_array(),
-                        help='Set units to use (default is \'english\')')
+                        help=_('Set units to use (default is \'english\')'))
     return parser.parse_args()
 
 
@@ -304,8 +323,8 @@ def main():
     settings = Settings(args)
     api_url = make_api_url(args, settings)
     r = requests.get(api_url)
+    print (_("Request: {0}").format(api_url))
     print_weather_data(r.content, args, settings)
-
 
 if __name__ == "__main__":
     main()
